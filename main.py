@@ -13,8 +13,6 @@ app = FastAPI(title="User Authentication Service")
 @app.post("/registration", response_model=UserResponse, status_code=status.HTTP_201_CREATED)
 async def register_user(user: User):
     """
-    Register a new user in the system.
-
     Creates a new user account with email validation, password hashing,
     and UUID generation. Ensures email uniqueness across all users.
 
@@ -57,8 +55,6 @@ async def register_user(user: User):
 @app.post("/login", response_model=LoginResponse)
 async def login_user(login_data: User):
     """
-    Authenticate a user with email and password.
-
     Validates user credentials against stored user data and returns
     a success message with user ID if authentication is successful.
 
@@ -94,10 +90,8 @@ async def login_user(login_data: User):
 @app.delete("/users/{user_id}", response_model=DeleteResponse)
 async def delete_user(user_id: str):
     """
-    Delete a user from the system.
-
-    Removes a user account from both the main user database and the
-    email-to-ID mapping. This operation is irreversible.
+    Removes a user from both the user_store dictionary and the
+    email_to_user_id dictionary
 
     Args:
         user_id (str): UUID of the user to delete
