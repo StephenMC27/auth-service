@@ -10,7 +10,7 @@ app = FastAPI(title="User Authentication Service")
 
 
 # API Endpoints
-@app.post("/register", response_model=UserResponse, status_code=status.HTTP_201_CREATED)
+@app.post("/registration", response_model=UserResponse, status_code=status.HTTP_201_CREATED)
 async def register_user(user: User):
     """
     Register a new user in the system.
