@@ -14,7 +14,7 @@ app = FastAPI(title="User Authentication Service")
 async def register_user(user: User):
     """
     Creates a new user account with email validation, password hashing,
-    and UUID generation. Ensures email uniqueness across all users.
+    and UUID generation. Ensures email uniqueness.
 
     Args:
         user_data (User): User registration data containing
