@@ -1,7 +1,6 @@
 from pydantic import BaseModel, EmailStr
 
 
-# Pydantic models
 class User(BaseModel):
     """
     Pydantic model for user registration request data.
@@ -18,7 +17,7 @@ class User(BaseModel):
 
 class UserResponse(BaseModel):
     """
-    Pydantic model for user data response (excludes sensitive information).
+    Pydantic model for user data response.
 
     Attributes:
         id (str): User's UUID
@@ -29,20 +28,7 @@ class UserResponse(BaseModel):
     email: EmailStr
 
 
-class LoginResponse(BaseModel):
-    """
-    Pydantic model for user login response.
-
-    Attributes:
-        message (str): Success message
-        user_id (str): User's UUID for identification
-    """
-
-    message: str
-    user_id: str
-
-
-class DeleteResponse(BaseModel):
+class UserDelete(BaseModel):
     """
     Pydantic model for user deletion response.
 
