@@ -26,7 +26,7 @@ async def delete_user(user_id: str):
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND, detail="User not found"
         )
-    
+
     delete_user(user_id)
 
     return UserDelete(message="User deleted successfully", user_id=user_id)

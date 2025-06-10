@@ -32,7 +32,7 @@ def get_user_by_email(email: str) -> dict | None:
 
     if not user_id:
         return None
-    
+
     return get_user_by_id(user_id)
 
 
@@ -41,15 +41,15 @@ def update_user(user_id: str, email: str = None, password: str = None) -> dict |
 
     if not user:
         return None
-    
+
     if email:
         user["email"] = email
-    
+
     if password:
         user["password"] = hash_password(password)
-    
+
     return user
-    
+
 
 def delete_user(user_id: str) -> str:
     user_email = user_store[user_id]["email"]

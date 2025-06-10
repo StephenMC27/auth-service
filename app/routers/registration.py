@@ -30,7 +30,7 @@ async def register_user(user: User):
         raise HTTPException(
             status_code=status.HTTP_409_CONFLICT, detail="Email already registered"
         )
-    
+
     user_id = create_user(user.email, user.password)
 
     return UserResponse(id=user_id, email=user.email)
