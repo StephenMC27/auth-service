@@ -1,10 +1,8 @@
-import uuid
-
 from fastapi import APIRouter, HTTPException, status
 
 from app.models.user import User, UserResponse
-from app.user_store import email_to_user_id, user_store
-from app.utilities import hash_password
+from app.user_store import email_to_user_id
+from app.utilities.user_utils import create_user
 
 router = APIRouter(prefix="/registration", tags=["registration"])
 
@@ -32,20 +30,7 @@ async def register_user(user: User):
         raise HTTPException(
             status_code=status.HTTP_409_CONFLICT, detail="Email already registered"
         )
-
-    # Generate UUID for user
-    user_id = str(uuid.uuid4())
-
-    # Hash password
-    hashed_password = hash_password(user.password)
-
-    user_record = {
-        "id": user_id,
-        "email": user.email,
-        "password_hash": hashed_password,
-    }
-
-    user_store[user_id] = user_record
-    email_to_user_id[user.email] = user_id
+    
+    user_id = create_user(user.email, user.password)
 
     return UserResponse(id=user_id, email=user.email)
