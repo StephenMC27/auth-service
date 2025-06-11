@@ -1,15 +1,15 @@
 import uuid
 
-import pytest
+from fastapi.testclient import TestClient
 
 from app.main import app
 from app.user_store import email_to_user_id, user_store
 
-from .fixtures import client
+client = TestClient(app)
 
 
 class TestUserDeletion:
-    """Test user deletion endpoint."""
+    """Test user deletion path operation."""
 
     def test_delete_user_success(self, registered_user, sample_user_data):
         """Test successful user deletion."""
@@ -49,4 +49,4 @@ class TestUserDeletion:
         """Test deletion with empty user ID."""
         # This should result in a 404 or 405 depending on FastAPI routing
         response = client.delete("/users/")
-        assert response.status_code in [404, 405]
+        assert response.status_code == 404

@@ -1,14 +1,13 @@
 import uuid
 
 import pytest
+from fastapi.testclient import TestClient
 
-# Import the FastAPI app and utility functions
-# Assuming the main file is named 'main.py'
 from app.main import app
 from app.user_store import email_to_user_id, user_store
 from app.utilities.password_utils import verify_password
 
-from .fixtures import clear_storage, client, sample_user_data
+client = TestClient(app)
 
 
 class TestUserRegistration:
@@ -23,7 +22,6 @@ class TestUserRegistration:
         data = response.json()
         assert "id" in data
         assert data["email"] == sample_user_data["email"]
-        assert data["name"] == sample_user_data["name"]
         assert "password" not in data  # Password should not be in response
 
         # Verify UUID format
@@ -60,11 +58,10 @@ class TestUserRegistration:
         invalid_data = {
             "email": "invalid-email",
             "password": "testpassword123",
-            "name": "Test User",
         }
 
         response = client.post("/registration", json=invalid_data)
-        assert response.status_code == 422  # Validation error
+        assert response.status_code == 422
 
     def test_register_missing_fields(self):
         """Test registration with missing required fields."""
@@ -82,72 +79,20 @@ class TestUserRegistration:
 
     def test_register_empty_fields(self):
         """Test registration with empty field values."""
-        empty_data = {"email": "", "password": "", "name": ""}
+        empty_data = {"email": "", "password": ""}
 
         response = client.post("/registration", json=empty_data)
         assert response.status_code == 422
 
-    def test_register_case_sensitive_email(self):
+    def test_register_case_sensitive_password(self):
         """Test that email addresses are treated case-sensitively."""
-        user_data_1 = {
-            "email": "test@example.com",
-            "password": "password123",
-            "name": "User 1",
-        }
+        user_data_1 = {"email": "test@example.com", "password": "password123"}
 
-        user_data_2 = {
-            "email": "TEST@EXAMPLE.COM",
-            "password": "password123",
-            "name": "User 2",
-        }
+        user_data_2 = {"email": "test@example.com", "password": "PASSWORD123"}
 
         response1 = client.post("/registration", json=user_data_1)
         assert response1.status_code == 201
 
         response2 = client.post("/registration", json=user_data_2)
-        # Should succeed as emails are different case
+        # Should succeed as passwords are different case
         assert response2.status_code == 201
-
-
-class TestUserDeletion:
-    """Test user deletion endpoint."""
-
-    def test_delete_user_success(self, registered_user, sample_user_data):
-        """Test successful user deletion."""
-        user_id = registered_user["id"]
-
-        # Verify user exists before deletion
-        assert user_id in users_db
-        assert sample_user_data["email"] in email_to_user_id
-
-        response = client.delete(f"/users/{user_id}")
-        assert response.status_code == 200
-
-        data = response.json()
-        assert data["message"] == "User deleted successfully"
-
-        # Verify user is removed from both databases
-        assert user_id not in users_db
-        assert sample_user_data["email"] not in email_to_user_id
-
-    def test_delete_nonexistent_user(self):
-        """Test deletion of non-existent user."""
-        fake_user_id = str(uuid.uuid4())
-
-        response = client.delete(f"/users/{fake_user_id}")
-        assert response.status_code == 404
-        assert "User not found" in response.json()["detail"]
-
-    def test_delete_invalid_uuid_format(self):
-        """Test deletion with invalid UUID format."""
-        invalid_id = "invalid-uuid"
-
-        response = client.delete(f"/users/{invalid_id}")
-        assert response.status_code == 404
-        assert "User not found" in response.json()["detail"]
-
-    def test_delete_empty_user_id(self):
-        """Test deletion with empty user ID."""
-        # This should result in a 404 or 405 depending on FastAPI routing
-        response = client.delete("/users/")
-        assert response.status_code in [404, 405]

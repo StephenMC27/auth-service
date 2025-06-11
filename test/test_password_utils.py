@@ -18,8 +18,8 @@ class TestPasswordUtilities:
         # Should be consistent
         assert hash_password(password) == hashed
 
-        # Different passwords should produce different hashes
-        assert hash_password("different") != hashed
+        # Should be case-sensitive and different passwords should produce different hashes
+        assert hash_password("TestPassword123") != hashed
 
     def test_verify_password(self):
         """Test password verification functionality."""

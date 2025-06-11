@@ -1,9 +1,10 @@
 import pytest
 from fastapi.testclient import TestClient
 
+from app.main import app
 from app.user_store import email_to_user_id, user_store
 
-client = TestClient()
+client = TestClient(app)
 
 
 @pytest.fixture(autouse=True)
@@ -16,7 +17,7 @@ def clear_storage():
 def sample_user_data():
     return {
         "email": "stephen.clark@anaconda.com",
-        "password_hash": "icantwaittoworkwithStephen",
+        "password": "icantwaittoworkwithStephen",
     }
 
 
