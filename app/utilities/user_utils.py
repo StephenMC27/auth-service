@@ -24,11 +24,11 @@ def create_user(email: str, password: str) -> str:
 
 
 def get_user_by_id(user_id: str) -> dict | None:
-    return user_store.get(user_id, None)
+    return user_store.get(user_id)
 
 
 def get_user_by_email(email: str) -> dict | None:
-    user_id = email_to_user_id.get(email, None)
+    user_id = email_to_user_id.get(email)
 
     if not user_id:
         return None
