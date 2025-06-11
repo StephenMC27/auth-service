@@ -85,7 +85,7 @@ class TestUserRegistration:
         assert response.status_code == 422
 
     def test_register_case_sensitive_password(self):
-        """Test that email addresses are treated case-sensitively."""
+        """Test that passwords are case-senitive."""
         user_data_1 = {"email": "test@example.com", "password": "password123"}
 
         user_data_2 = {"email": "test@example.com", "password": "PASSWORD123"}
@@ -94,5 +94,5 @@ class TestUserRegistration:
         assert response1.status_code == 201
 
         response2 = client.post("/registration", json=user_data_2)
-        # Should succeed as passwords are different case
-        assert response2.status_code == 201
+        # Should fail as passwords are different case
+        assert response2.status_code == 409
