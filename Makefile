@@ -2,7 +2,11 @@
 start:
 	fastapi dev app/main.py
 
-# Format code
+# Sort imports and format code
 format:
 	isort .
 	black .
+
+# Run unit tests
+unit-test:
+	pytest test/
