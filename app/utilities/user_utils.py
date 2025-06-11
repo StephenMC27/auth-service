@@ -1,7 +1,6 @@
 import uuid
 
 from app.user_store import email_to_user_id, user_store
-from app.models.user import UserResponse
 from app.utilities.password_utils import hash_password
 
 
