@@ -1,7 +1,7 @@
 from fastapi import APIRouter, HTTPException, status
 
 from app.models.user import UserDelete
-from app.utilities.user_utils import get_user_by_id
+from app.utilities.user_utils import get_user_by_id, delete_user_by_id
 
 router = APIRouter(prefix="/users", tags=["users"])
 
@@ -27,6 +27,6 @@ async def delete_user(user_id: str):
             status_code=status.HTTP_404_NOT_FOUND, detail="User not found"
         )
 
-    delete_user(user_id)
+    delete_user_by_id(user_id)
 
     return UserDelete(message="User deleted successfully", user_id=user_id)

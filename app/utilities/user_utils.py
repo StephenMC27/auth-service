@@ -1,6 +1,7 @@
 import uuid
 
 from app.user_store import email_to_user_id, user_store
+from app.models.user import UserResponse
 from app.utilities.password_utils import hash_password
 
 
@@ -36,22 +37,22 @@ def get_user_by_email(email: str) -> dict | None:
     return get_user_by_id(user_id)
 
 
-def update_user(user_id: str, email: str = None, password: str = None) -> dict | None:
-    user = user_store.get(user_id, None)
+def update_user(user_id: str, updated_email: str = None, updated_password: str = None) -> dict | None:
+    user = get_user_by_id(user_id)
 
     if not user:
         return None
 
-    if email:
-        user["email"] = email
+    if updated_email:
+        user["email"] = updated_email
 
-    if password:
-        user["password"] = hash_password(password)
+    if updated_password:
+        user["password"] = hash_password(updated_password)
 
     return user
 
 
-def delete_user(user_id: str) -> str:
+def delete_user_by_id(user_id: str) -> str:
     user_email = user_store[user_id]["email"]
 
     del user_store[user_id]

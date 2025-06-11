@@ -3,7 +3,7 @@ from fastapi import APIRouter, HTTPException, status
 from app.models.login import LoginResponse
 from app.models.user import User
 from app.user_store import email_to_user_id, user_store
-from app.utilities import verify_password
+from app.utilities.password_utils import verify_password
 
 router = APIRouter(prefix="/login", tags=["login"])
 
