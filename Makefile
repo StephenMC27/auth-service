@@ -9,4 +9,4 @@ format:
 
 # Run unit tests
 unit-test:
-	pytest test/
+	pytest -v test/
